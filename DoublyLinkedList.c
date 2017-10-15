@@ -14,6 +14,17 @@ void printList(node* r){
 	}
 }
 
+void printBackwards(node* r){
+	node* iter = r;
+	while(iter->next != NULL){
+		iter = iter->next;
+	}
+	while(iter !=NULL){
+		printf("%i\n", iter->x);
+		iter= iter->prev;
+	}
+}
+
 void addInOrder(node** r,int x){
 	
 	if((*r) == NULL){
@@ -28,36 +39,101 @@ void addInOrder(node** r,int x){
 		toBePrepended->x = x;
 		toBePrepended->prev = NULL;
 		toBePrepended->next = *r;
+		(*r)->prev = toBePrepended;
 		*r = toBePrepended;
 		return;
 	}
 	
 	node* iter = *r;
-	while(iter->next != NULL){
-		iter = iter ->next;
+	while(iter->next != NULL && iter->next->x < x){
+		iter = iter->next;
 	}
-	iter->next = malloc(sizeof(node));
-	iter->next->prev =iter;
-	iter->next->x = x;	
-	iter->next->next = NULL;
+	node* temp = malloc(sizeof(node));
+	temp->x = x;
+	temp->next = iter->next;
+	if(iter->next != NULL){
+		iter->next->prev = temp;
+	}
+	temp->prev = iter;
+	iter->next = temp;
+	
+	
 
 }
 
 
+		
+void delete(node** r,int x){
+	int endOfList = 0;
+	node* toBeDeleted;
+	node* iter;
+	node* newRoot;
+	while(endOfList != 1){
+		if((*r)->x == x){
+			toBeDeleted = (*r);
+			*r = (*r)->next;
+			(*r)->prev = NULL;
+			iter = *r;
+			newRoot= *r;
+			free(toBeDeleted);
+			continue;
+		}
+		
+		if(newRoot->x == x){
+			toBeDeleted = newRoot;
+			newRoot->prev->next = toBeDeleted->next;
+			newRoot->next->prev = toBeDeleted->prev;
+			free(toBeDeleted);
+				
+		}
+		   
+		newRoot = newRoot->next;
+		if(newRoot->next == NULL){
+			endOfList = 1;
+			continue;
+		}
+	}
+			
+		
+	
+	
+}
+	
+	
+	
+	
+	
+
+		
 int main(){
 	node* root;
 	root = NULL;
-	addInOrder(&root,5);
-	addInOrder(&root,4);
-	addInOrder(&root,3);
-	addInOrder(&root,1);
 	addInOrder(&root,7);
+	addInOrder(&root,4);
+	addInOrder(&root,2);
+	addInOrder(&root,1);
+	addInOrder(&root,1);
+	addInOrder(&root,3);
+	addInOrder(&root,4);
+	addInOrder(&root,7);
+	addInOrder(&root,6);
+	addInOrder(&root,8);
+	addInOrder(&root,15);
+	addInOrder(&root,10);
+	addInOrder(&root,12);
+	addInOrder(&root,29);
+	addInOrder(&root,0);
+	
 
+	//delete(&root,2);
+	//delete(&root,3);
 
 	puts("Before Deletion");
 	printList(root);
-	printf("\nAfter Deletion\n");
-	printList(root);
+	printf("\nBackwards\n");
+	printBackwards(root);
+	
+	
 	return 0;
 }
 	
