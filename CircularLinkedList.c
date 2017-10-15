@@ -33,7 +33,6 @@ void printList(node* r){
 void delete(node** r,int x){
 	node* toBeDeleted;
 	node* newRoot = *r;
-	node* headOfList = *r;
 	node* newRootCopy;
 	int endOfList = 0;
 	node* iter = *r;
@@ -43,14 +42,13 @@ void delete(node** r,int x){
 			*r = (*r)->next;		//Then you have to check the list again with "continue" to see...
 			newRoot = *r;			//...whether the data you want to delete is again in the root of your list or not.
 			newRootCopy = *r;
-			headOfList = newRootCopy;
 
-			while( newRoot->next != toBeDeleted ){
-				newRoot = newRoot->next;
+			while( newRootCopy->next != toBeDeleted ){
+				newRootCopy = newRootCopy->next;
 			}
-			newRoot->next = newRootCopy ;
+			newRootCopy->next = newRoot ;
 			free(toBeDeleted);
-			newRoot = headOfList;
+			
 			continue;
 		}
 		
@@ -58,12 +56,7 @@ void delete(node** r,int x){
 			toBeDeleted = newRoot->next;			//...this will run to check whether your next element is the one...
 			newRoot->next = toBeDeleted->next;		//...you want to delete. If so, the next element of the element...
 			free(toBeDeleted);						//...you want to delete will be assigned to the current element's next not to...
-			if(newRoot->next == newRootCopy){ 				//...lose the rest of the list. If the newRoot's next element is NULL
-				endOfList = 1;		   				//...that means we are at the end of the list so atTheEnd must be assigned 1.
-				continue;
-			}
-			else
-				continue;
+			continue;							 	//...lose the rest of the list.
 		}
 		
 		newRoot = newRoot->next;
@@ -132,7 +125,7 @@ int main(){
 	//printList(root);
 	puts("First List");
 	printList(root);
-	delete(&root,13);
+	delete(&root,82);
 	printf("\nSecond List\n");
 	printList(root);
 	return 0;
