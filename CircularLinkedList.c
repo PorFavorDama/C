@@ -110,7 +110,6 @@ int main(){
 	addInOrder(&root,10);
 	addInOrder(&root,16);
 	addInOrder(&root,6);
-	node* root2 = malloc(sizeof(node));
 
 	puts("Before Deletion");
 	printList(root);
