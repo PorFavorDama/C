@@ -6,16 +6,6 @@ typedef struct n{
 	struct n* next;
 }node;
 
-void addElement(node* r,int x){
-	node* iter = r;
-	while(iter->next != r){
-		iter = iter->next;
-	}
-		iter->next = malloc(sizeof(node));
-		iter->next->x=x;
-		iter->next->next=r;
-}
-
 
 void printList(node* r){
 	node* realRoot = r;
@@ -60,73 +50,73 @@ void delete(node** r,int x){
 		}
 		
 		newRoot = newRoot->next;
-		if(newRoot == newRootCopy){
+		if(newRoot->next == (*r)){
 			endOfList =1;
 		}
 	}
 	
 }
 
-/*void addInOrder(node** r,int x){
+void addInOrder(node** r,int x){
+	
 	node* root = *r;
-	if(root == NULL){								//If our root is NULL then we will allocate memory for it...
-		root = (node*) malloc(sizeof(node));		//...and then assign x to root->x and Null to root->next.
-		root ->next = NULL;						//Then we will have to change the pointer of the root...
-		root ->x = x;								
-		*r = root;								//...like so.
-		//return;
+	if(root == NULL){								
+		root = malloc(sizeof(node));				
+		root->x = x;
+		*r = root;			
+		root->next = (*r);	
+		return;
 	}
-	if( root->x > x){												//If the root's x is greater than the x we want to add...
-		node* currentRoot = root;									//... then we will have to prepend it to the root.
-		node* toBePrepended =(node*) malloc(sizeof(node));			//Allocating memory for our element to be prepended.
-		toBePrepended-> x = x;										
-		toBePrepended->next = root;
-		(*r) = toBePrepended;										//Changing our pointer's first element to be "toBePrepended"
+		
+	if( (*r)->x > x){												
+		node* iter;													
+		node* toBePrepended = malloc(sizeof(node));			
+		toBePrepended-> x = x;	
+		toBePrepended->next = *r;
+		iter = *r;
+		node* dondur = iter;
+		(*r) = toBePrepended;
+		
+		while(iter->next != dondur){
+			iter = iter->next;
+		}
+		iter->next = toBePrepended;
+		
 		return;
 	}
 	
 	node* iter = *r;
 	
-	while( iter->next != NULL && iter->next->x < x){	//while iter->next is not null and iter->next's x is less than our X... 
+	while( iter->next != *r && iter->next->x < x){	//while iter->next is not null and iter->next's x is less than our X... 
 		iter = iter-> next;								
 	}
-	node* temp = (node*) malloc(sizeof(node));			//Allocate memory for our new element.
+	node* temp = malloc(sizeof(node));					//Allocate memory for our new element.
 	temp->next = iter->next;							//Then assign the iter's null to our new element's next item.
 	temp->x = x;										//Assign the x value.
 	iter->next = temp;									//Now our current element's next should point to our new element...
-}		*/												//...which is greater than the 	current element.
+}														//...which is greater than the 	current element.
 		
 
 int main(){
 	node* root;
-	root = malloc(sizeof(node));
-	root->next = root;
-	root->x = 13;
-	//addInOrder(&root,5);
-	//addInOrder(&root,7);
-	//addInOrder(&root,6);
-	//addInOrder(&root,1);
-	//addInOrder(&root,3);
-	//addInOrder(&root,21);
-	//addInOrder(&root,19);
-	addElement(root,13);
-	addElement(root,14);
-	addElement(root,500);
-	addElement(root,13);
-	addElement(root,500);
-	addElement(root,82);
-	addElement(root,18);
-	addElement(root,13);
-	addElement(root,500);
-	//for(int i = 0; i < 5;i++){
-		//addInOrder(&root,i*5);
-	//}
-	//addElement(root,13);
-	//printList(root);
-	puts("First List");
+	root = NULL;
+	addInOrder(&root,5);
+	addInOrder(&root,3);
+	addInOrder(&root,3);
+	addInOrder(&root,2);
+	addInOrder(&root,4);
+	addInOrder(&root,1);
+	addInOrder(&root,1);
+	addInOrder(&root,10);
+	addInOrder(&root,16);
+	addInOrder(&root,6);
+	node* root2 = malloc(sizeof(node));
+
+	puts("Before Deletion");
 	printList(root);
-	delete(&root,82);
-	printf("\nSecond List\n");
+	delete(&root,16);
+	delete(&root,5);
+	printf("\nAfter Deletion\n");
 	printList(root);
 	return 0;
 }
