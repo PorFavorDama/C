@@ -64,16 +64,15 @@ void addInOrder(node** r,int x){
 
 		
 void delete(node** r,int x){
-	int endOfList = 0;
+	int endOfList = 0;		//To check whether we are at the end of the list or not.
 	node* toBeDeleted;
-	node* iter = *r;
-	node* newRoot = *r;
-	while(endOfList != 1){
+	node* newRoot = *r; 	//The newRoot pointer will be assigned.
+	while(endOfList != 1){	//Unless we are at the end of the list do...
 		if((*r)->x == x){
 			toBeDeleted = (*r);
 			*r = (*r)->next;
 			(*r)->prev = NULL;
-			iter = *r;
+			
 			newRoot= *r;
 			free(toBeDeleted);
 			continue;
@@ -82,8 +81,15 @@ void delete(node** r,int x){
 		if(newRoot->next->x == x){
 			toBeDeleted = newRoot->next;
 			newRoot->next = toBeDeleted->next;
+			if(toBeDeleted->next != NULL){
 			toBeDeleted->next->prev = toBeDeleted->prev;
+			}else {
+				free(toBeDeleted);
+				endOfList = 1;
+				continue;
+			}
 			free(toBeDeleted);
+
 			continue;
 		}
 		   
@@ -92,18 +98,10 @@ void delete(node** r,int x){
 			endOfList = 1;
 			continue;
 		}
-	}
-			
 		
-	
-	
+	}
 }
 	
-	
-	
-	
-	
-
 		
 int main(){
 	node* root;
@@ -117,6 +115,7 @@ int main(){
 	addInOrder(&root,4);
 	addInOrder(&root,7);
 	addInOrder(&root,6);
+	addInOrder(&root,8);
 	addInOrder(&root,8);
 	addInOrder(&root,15);
 	addInOrder(&root,10);
@@ -133,6 +132,17 @@ int main(){
 	printBackwards(root);
 	delete(&root,2);
 	delete(&root,7);
+	delete(&root,8);
+	delete(&root,4);
+	delete(&root,17);
+	delete(&root,12);
+	delete(&root,29);
+	delete(&root,15);
+	delete(&root,10);
+	delete(&root,0);
+	delete(&root,1);
+	//delete(&root,6);
+
 
 	puts("\n------------After Deletion------------\n");
 	printList(root);
