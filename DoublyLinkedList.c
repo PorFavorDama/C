@@ -8,13 +8,14 @@ typedef struct n{
 }node;
 
 void printList(node* r){
-	while(r !=NULL){
+	while(r !=NULL){ // Liste boş değilse elemanları yazdırır.
 		printf("%i\n",r->x);
 		r = r->next;
 	}
 }
 
-void printBackwards(node* r){
+void printBackwards(node* r){ // Prev pointerlarını kullanarak diziyi tersten yazdırır.
+	if(r != NULL){ //Eğer dizi boş değilse ya da tüm elemanlar silinmemişse - çalışır.
 	node* iter = r;
 	while(iter->next != NULL){
 		iter = iter->next;
@@ -23,14 +24,17 @@ void printBackwards(node* r){
 		printf("%i\n", iter->x);
 		iter= iter->prev;
 	}
+	}else {
+		printf("\nDizideki tüm elemanlar silinmiş olabilir. :( \nYeni elemanlar ekleyebilirsiniz ya da silinenlerden birkaçını silmek istemeyebilirsiniz.^^\n");
+	}
 }
 
 void addInOrder(node** r,int x){
 	
-	if((*r) == NULL){
-		*r = malloc(sizeof(node));
-		(*r)->next = NULL;
-		(*r)->prev = NULL;
+	if((*r) == NULL){ 		// Liste boş ise öncelikle memory allocate ederek başlar.
+		*r = malloc(sizeof(node));	//Allocating memory.
+		(*r)->next = NULL;			//Assigning other variables.
+		(*r)->prev = NULL;		
 		(*r)->x = x;
 		return;
 	}
@@ -64,32 +68,42 @@ void addInOrder(node** r,int x){
 
 		
 void delete(node** r,int x){
-	int endOfList = 0;		//To check whether we are at the end of the list or not.
-	node* toBeDeleted;
-	node* newRoot = *r; 	//The newRoot pointer will be assigned.
-	while(endOfList != 1){	//Unless we are at the end of the list do...
+	int endOfList = 0;		//Listenin sonuna gelip gelmediğimizi kontrol edeceğimiz değişken.
+	node* toBeDeleted;		// silinecek elemanlar buraya alınacak.
+	node* newRoot = *r; 	//Eğer ilk eleman silinirse vs. yeni atanacak olan pointerı tutacak değişken.
+	while(endOfList != 1){	//Listenin sonuna gelmediğimiz sürece çalışır...
 		if((*r)->x == x){
 			toBeDeleted = (*r);
+			if((*r)->next != NULL){ 	
 			*r = (*r)->next;
 			(*r)->prev = NULL;
-			
-			newRoot= *r;
+				newRoot= *r;
 			free(toBeDeleted);
+			}else if((*r)->next == NULL) {
+				*r = NULL;
+				endOfList = 1;
+				continue;
+			}
+
+			if((*r)->next == NULL && (*r)->x != x){ // Eğer listede 2 item kaldıysa, biz baştaki itemi yukarıda sildiysek... 
+				endOfList = 1;		//...ve son kalan item de aynı değilse (çünkü aynı olan tüm elemanları siliyoruz). listenin sonundayız.
+				continue;
+			}
+						
 			continue;
 		}
 		
-		if(newRoot->next->x == x){
+		if(newRoot->next->x == x){ 						//Eğer silmek istediğimiz eleman aradaysa.
 			toBeDeleted = newRoot->next;
 			newRoot->next = toBeDeleted->next;
-			if(toBeDeleted->next != NULL){				//Check if we deleted the last item of the list.
-			toBeDeleted->next->prev = toBeDeleted->prev;
-			}else {
+			if(toBeDeleted->next != NULL){				//Dizi sonundaki elemanı silip silmediğimizi kontrol ediyoruz.
+			toBeDeleted->next->prev = toBeDeleted->prev;	//Eğer dizi sonundaki bir elemanı silmiyorsak
+			}else {											//next elemanın prev'ini sileceğimiz elemanın prev'i ile bağlıyoruz.
 				free(toBeDeleted);
 				endOfList = 1;
 				continue;
 			}
 			free(toBeDeleted);
-
 			continue;
 		}
 		   
@@ -124,6 +138,7 @@ int main(){
 	addInOrder(&root,0);
 	addInOrder(&root,0);
 	addInOrder(&root,17);
+	addInOrder(&root,8);
 	
 
 	puts("\n------------Before Deletion------------\n");
@@ -140,9 +155,12 @@ int main(){
 	delete(&root,15);
 	delete(&root,10);
 	delete(&root,0);
+	delete(&root,6);
+	delete(&root,3);
 	delete(&root,1);
-	//delete(&root,6);
-
+		
+	
+	
 
 	puts("\n------------After Deletion------------\n");
 	printList(root);
