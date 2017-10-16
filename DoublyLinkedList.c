@@ -66,8 +66,8 @@ void addInOrder(node** r,int x){
 void delete(node** r,int x){
 	int endOfList = 0;
 	node* toBeDeleted;
-	node* iter;
-	node* newRoot;
+	node* iter = *r;
+	node* newRoot = *r;
 	while(endOfList != 1){
 		if((*r)->x == x){
 			toBeDeleted = (*r);
@@ -79,12 +79,12 @@ void delete(node** r,int x){
 			continue;
 		}
 		
-		if(newRoot->x == x){
-			toBeDeleted = newRoot;
-			newRoot->prev->next = toBeDeleted->next;
-			newRoot->next->prev = toBeDeleted->prev;
+		if(newRoot->next->x == x){
+			toBeDeleted = newRoot->next;
+			newRoot->next = toBeDeleted->next;
+			toBeDeleted->next->prev = toBeDeleted->prev;
 			free(toBeDeleted);
-				
+			continue;
 		}
 		   
 		newRoot = newRoot->next;
@@ -123,14 +123,20 @@ int main(){
 	addInOrder(&root,12);
 	addInOrder(&root,29);
 	addInOrder(&root,0);
+	addInOrder(&root,0);
+	addInOrder(&root,17);
 	
 
-	//delete(&root,2);
-	//delete(&root,3);
-
-	puts("Before Deletion");
+	puts("\n------------Before Deletion------------\n");
 	printList(root);
-	printf("\nBackwards\n");
+	printf("\n----Backwards----\n");
+	printBackwards(root);
+	delete(&root,2);
+	delete(&root,7);
+
+	puts("\n------------After Deletion------------\n");
+	printList(root);
+	printf("\n----Backwards----\n");
 	printBackwards(root);
 	
 	
