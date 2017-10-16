@@ -81,7 +81,7 @@ void delete(node** r,int x){
 		if(newRoot->next->x == x){
 			toBeDeleted = newRoot->next;
 			newRoot->next = toBeDeleted->next;
-			if(toBeDeleted->next != NULL){
+			if(toBeDeleted->next != NULL){				//Check if we deleted the last item of the list.
 			toBeDeleted->next->prev = toBeDeleted->prev;
 			}else {
 				free(toBeDeleted);
