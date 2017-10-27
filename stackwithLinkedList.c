@@ -1,8 +1,9 @@
 /*
 # This is a simple, straightforward stack implementation with linked lists.
-# There are three methods used, which are (i) push 		-> pushes an element onto the stack.
-#										 (ii) pop  		-> pops up an element from the stack.
-#										(iii) printList -> prints all the elements in the stack. 
+# There are three methods used, which are 
+# (i) push -> pushes an element onto the stack.
+# (ii) pop -> pops up an element from the stack.
+# (iii) printList -> prints all the elements in the stack. 
 */
 
 #include <stdio.h>
