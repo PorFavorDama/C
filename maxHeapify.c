@@ -5,10 +5,13 @@ int* maxHeapify(int parent, int size, int* to_beHeapified){
     int leftChild = parent*2+1;
     int rightChild;
     int largest;
-    if(size % 2 != 0)
+
+    if(size % 2 != 0 || parent != size/2-1 )
         rightChild = parent*2+2;
     else
         rightChild = 0;
+
+
     if(parent == -1 || size <= leftChild || size <= rightChild)
         return to_beHeapified;
 
